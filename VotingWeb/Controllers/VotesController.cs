@@ -61,7 +61,7 @@ namespace VotingWeb.Controllers
                 }
             }
 
-            return this.Json(result);
+            return this.Json(result.OrderBy(x => x.Key));
         }
 
         // PUT: api/Votes/name
@@ -126,7 +126,13 @@ namespace VotingWeb.Controllers
         /// <returns></returns>
         private long GetPartitionKey(string name)
         {
-            return Char.ToUpper(name.First()) - 'A';
+            if (Char.IsLetter(name.First()))
+            {
+                return Char.ToUpper(name.First()) - 'A';
+            }
+            else {
+                return name.First() % 26;
+            }
         }
     }
 }
